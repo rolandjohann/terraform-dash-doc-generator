@@ -118,6 +118,9 @@ task :copy do
       doc.xpath("id('header')").each do |e|
         e.remove
       end
+      doc.xpath("//div[contains(@class, 'mega-nav-sandbox')]").each do |e|
+        e.remove
+      end
       doc.xpath("//div[contains(@class, 'docs-sidebar')]").each do |e|
         e.parent.remove
       end
@@ -125,6 +128,9 @@ task :copy do
         e.remove
       end
 
+      doc.xpath("//div[contains(@class, 'bs-docs-section')]/h1").each do |e|
+        e["style"] = "margin-top: 0px"
+      end
       doc.xpath("//div[contains(@role, 'main')]").each do |e|
         e["style"] = "width: 100%"
       end
