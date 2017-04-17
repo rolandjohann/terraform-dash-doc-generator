@@ -31,7 +31,7 @@ class Index
 
   def insert(type, path)
     doc = Nokogiri::HTML(File.open(path).read)
-    name = doc.xpath("//div[@class='bs-docs-section']/h1").text.chomp
+    name = doc.title.sub(" - Terraform by HashiCorp", "").sub(/.*: (.*)/, "\\1")
     @db.execute <<-SQL, name: name, type: type, path: path
       INSERT OR IGNORE INTO searchIndex (name, type, path)
       VALUES(:name, :type, :path)
@@ -102,12 +102,12 @@ task :copy do
 
       doc.title = doc.title.sub(" - Terraform by HashiCorp", "")
 
-      doc.xpath('//h2').each do |h2|
+      doc.xpath("//a[contains(@class, 'anchor')]").each do |e|
         a = Nokogiri::XML::Node.new "a", doc
         a["class"] = "dashAnchor"
         a["name"] = "//apple_ref/cpp/%{type}/%{name}" %
-          {type: "Section", name: ERB::Util.url_encode(h2.text)}
-        h2.previous = a
+          {type: "Section", name: ERB::Util.url_encode(e.parent.children.last.text.strip)}
+        e.previous = a
       end
 
       doc.xpath('//script').each do |script|
@@ -124,11 +124,14 @@ task :copy do
       doc.xpath("//div[contains(@class, 'docs-sidebar')]").each do |e|
         e.parent.remove
       end
+      doc.xpath("id('docs-sidebar')").each do |e|
+        e.remove
+      end
       doc.xpath("id('footer')").each do |e|
         e.remove
       end
 
-      doc.xpath("//div[contains(@class, 'bs-docs-section')]/h1").each do |e|
+      doc.xpath('//div[@id="inner"]/h1').each do |e|
         e["style"] = "margin-top: 0px"
       end
       doc.xpath("//div[contains(@role, 'main')]").each do |e|
