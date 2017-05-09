@@ -162,6 +162,12 @@ task :create_index do
 
       index.insert "Guide", path
     end
+    # backends
+    Dir.glob("docs/backends/**/*")
+      .find_all{ |f| File.stat(f).file? }.each do |path|
+
+      index.insert "Backend", path
+    end
     # configuration
     Dir.glob("docs/configuration/**/*")
       .find_all{ |f| File.stat(f).file? }.each do |path|
