@@ -196,7 +196,17 @@ task :create_index do
     Dir.glob("docs/providers/**/*")
       .find_all{ |f| File.stat(f).file? }.each do |path|
 
-      index.insert "Provider", path
+      maybe_type_code = path.split("/").reverse.drop(1).first
+
+      if maybe_type_code == "r"
+        type = "Resource"
+      elsif maybe_type_code == "d"
+        type = "Directive"
+      else
+        type = "Provider"
+      end
+
+      index.insert type, path
     end
     # provisioners
     Dir.glob("docs/provisioners/**/*")
