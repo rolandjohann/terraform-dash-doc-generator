@@ -6,9 +6,6 @@ CWD=$(pwd)
 BUILD_PATH="$(pwd)/build"
 TERRAFORM_PATH="$(pwd)/terraform"
 
-rm -rf $BUILD_PATH
-rm -rf v*
-
 mkdir $BUILD_PATH
 
 git clone https://github.com/hashicorp/terraform.git $TERRAFORM_PATH || true
@@ -19,12 +16,13 @@ make_docs() {
     tag=$1
 
     tag_dir="$BUILD_PATH/$tag"
+
+    rm -rf $tag_dir
     mkdir $tag_dir
 
     cd $TERRAFORM_PATH
     git reset --hard
     git checkout $tag
-    git pull
 
     cp $CWD/Rakefile $TERRAFORM_PATH/website
 
