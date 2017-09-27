@@ -68,8 +68,9 @@ task :setup do
   if File::exist? "source/assets/images/favicons/favicon-16x16.png" and File::exist? "source/assets/images/favicons/favicon-32x32.png"
     cp "source/assets/images/favicons/favicon-16x16.png", "Terraform.docset/icon.png"
     cp "source/assets/images/favicons/favicon-32x32.png", "Terraform.docset/icon@2x.png"
+  elsif File::exists? "source/assets/images/favicon.png"
+    cp "source/assets/images/favicon.png", "Terraform.docset/icon.png"
   else
-    mkdir_p "source/assets/images/favicons/"
     cp "source/images/favicon.png", "Terraform.docset/icon.png"
   end
 
