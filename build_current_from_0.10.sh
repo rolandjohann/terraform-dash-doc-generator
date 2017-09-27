@@ -30,4 +30,4 @@ cp $CWD/Rakefile .
 
 rake
 
-mv Terraform.docset $BUILD_PATH
+mv Terraform.tgz $BUILD_PATH

@@ -34,7 +34,7 @@ make_docs() {
     rake
 
     if [ $? -eq 0 ]; then
-        mv Terraform.docset $tag_dir
+        mv Terraform.tgz $tag_dir
     else
         rm -rf $tag_dir
     fi
