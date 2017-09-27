@@ -47,6 +47,15 @@ task :clean do
 end
 
 task :build do
+  config_extensions = ["activate :relative_assets", "set :relative_links, true", "set :strip_index_file, false"]
+  File.open("config.rb", "a") do |f|
+    config_extensions.each do |ce|
+      if File.readlines("config.rb").grep(Regexp.new ce).size == 0
+        f.puts ce
+      end
+    end
+  end
+
   sh "bundle"
   sh "bundle exec middleman build"
 end
