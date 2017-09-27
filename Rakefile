@@ -64,8 +64,15 @@ task :setup do
   mkdir_p "Terraform.docset/Contents/Resources/Documents"
 
   # Icon
-  cp "source/assets/images/favicons/favicon-16x16.png", "Terraform.docset/icon.png"
-  cp "source/assets/images/favicons/favicon-32x32.png", "Terraform.docset/icon@2x.png"
+  # at older docs there is no retina icon
+  if File::exist? "source/assets/images/favicons/favicon-16x16.png" and File::exist? "source/assets/images/favicons/favicon-32x32.png"
+    cp "source/assets/images/favicons/favicon-16x16.png", "Terraform.docset/icon.png"
+    cp "source/assets/images/favicons/favicon-32x32.png", "Terraform.docset/icon@2x.png"
+  else
+    mkdir_p "source/assets/images/favicons/"
+    cp "source/images/favicon.png", "Terraform.docset/icon.png"
+  end
+
   # Info.plist
   File.open("Terraform.docset/Contents/Info.plist", "w") do |f|
     f.write <<-XML
